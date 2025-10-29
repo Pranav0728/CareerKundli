@@ -39,7 +39,7 @@ export default function UploadResume() {
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="rounded-2xl p-6 bg-gradient-to-br from-purple-600/10 via-indigo-600/10 to-blue-600/10 border border-white/10 backdrop-blur">
+      <div className="rounded-2xl p-6 bg-linear-to-br from-purple-600/10 via-indigo-600/10 to-blue-600/10 border border-white/10 backdrop-blur">
         <h2 className="text-2xl font-semibold mb-3">
           Upload your Resume to Reveal Your Career Horoscope 🌟
         </h2>
