@@ -3,18 +3,18 @@ import { UserCircle, Brain, TrendingUp } from "lucide-react";
 const steps = [
   {
     icon: UserCircle,
-    title: "Share Your Details",
-    description: "Enter your birth date, time, and location along with your career interests",
+    title: "Upload Your Resume",
+    description: "Simply upload your resume — our AI analyzes your skills, experience, and career patterns.",
   },
   {
     icon: Brain,
-    title: "AI Analysis",
-    description: "Our AI combines astrological insights with career data to understand your strengths",
+    title: "AI Meets Astrology",
+    description: "AI + Astrology combine with live job market data to find your ideal path.",
   },
   {
     icon: TrendingUp,
-    title: "Get Your Path",
-    description: "Receive personalized career recommendations and growth strategies",
+    title: "Discover Your Destiny",
+    description: "Get your personalized Career Kundli and future career insights.",
   },
 ];
 

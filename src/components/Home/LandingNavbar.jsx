@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
+// import { ModeToggle } from "../ui/ModeToggle";
 
-const Navbar = () => {
+const LandingNavbar = () => {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -46,15 +48,21 @@ const Navbar = () => {
               Pricing
             </button>
           </div>
+          {/* Mode Toggle */}
+          {/* <ModeToggle /> */}
+
+
 
           {/* CTA Button */}
+          <Link href="/signin" passHref>
           <Button variant="hero" size="sm">
             Get Started
           </Button>
+          </Link>
         </div>
       </div>
     </nav>
   );
 };
 
-export default Navbar;
+export default LandingNavbar;

@@ -1,115 +1,98 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Sparkles, User } from "lucide-react";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { signOut } from "next-auth/react";
+// import { ModeToggle } from "./ui/ModeToggle";
+const logout = async () => {
+  await signOut({ callbackUrl: "/" });
+};
+const Navbar = () => {
+  // ✅ Dynamic navbar links
+  const navItems = [
+    { name: "Analyze", link: "/analyze" },
+    { name: "History", link: "/history" },
+  ];
 
-export default function Navbar() {
-  const { data: session } = useSession();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => setIsMenuOpen((v) => !v);
+  // ✅ Dynamic dropdown links
+  const dropdownItems = [
+    { name: "Profile", link: "/profile" },
+    { name: "Settings", link: "/settings" },
+    { name: "Pricing", link: "/pricing" },
+  ];
 
   return (
-    <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-bold text-indigo-600">
-              CareerKundli
-            </Link>
-          </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* ✅ Logo */}
+          <Link href="/" className="flex items-center gap-2 cursor-pointer">
+            <Sparkles className="w-6 h-6 text-primary" />
+            <span className="text-xl font-bold text-gradient-gold">
+              Career Kundli
+            </span>
+          </Link>
 
-          {/* Desktop menu */}
-          <div className="hidden sm:flex sm:items-center sm:space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-              Home
-            </Link>
-            <Link href="/analyze" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-              Analyze Resume
-            </Link>
-            {session ? (
-              <>
-                <Link href="/history" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-                  History
-                </Link>
-                <Link href="/profile" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Profile
-                </Link>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
+          {/* ✅ Navigation Links */}
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
               <Link
-                href="/signin"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                key={item.name}
+                href={item.link}
+                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
               >
-                Sign In
+                {item.name}
               </Link>
-            )}
+            ))}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center sm:hidden">
-            <button
-              onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-            >
-              <span className="sr-only">Open main menu</span>
-              {isMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
+          {/* ✅ Theme Toggle and Profile Dropdown */}
+          <div className="flex items-center gap-3">
+            {/* <ModeToggle /> */}
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="focus:outline-none">
+                  <Avatar className="w-9 h-9 border border-border hover:ring-2 hover:ring-primary transition-all">
+                    <AvatarImage src="/avatar.png" alt="User Avatar" />
+                    <AvatarFallback>
+                      <User className="w-4 h-4 text-muted-foreground" />
+                    </AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-44 mt-2">
+                {dropdownItems.map((item, index) => (
+                  <div key={index}>
+                    {item.separator && <DropdownMenuSeparator />}
+                    <DropdownMenuItem asChild>
+                      <Link href={item.link}>{item.name}</Link>
+                    </DropdownMenuItem>
+                  </div>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Button onClick={logout} variant="destructive" className="w-full">
+                    Logout
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="sm:hidden">
-          <div className="pt-2 pb-3 space-y-1">
-            <Link href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              Home
-            </Link>
-            <Link href="/analyze" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-              Analyze Resume
-            </Link>
-            {session ? (
-              <>
-                <Link href="/history" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-                  History
-                </Link>
-                <Link href="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50">
-                  Profile
-                </Link>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Link
-                href="/signin"
-                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-              >
-                Sign In
-              </Link>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
-}
+};
+
+export default Navbar;

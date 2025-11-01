@@ -38,7 +38,7 @@
 }
 
 /* Light Theme */
-:root {
+/* :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -71,10 +71,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-}
+} */
 
 /* Dark Theme */
-.dark {
+:root {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -110,84 +110,129 @@
 
 /* Base Styles */
 @layer base {
+  :root {
+    --background: 240 20% 6%;
+    --foreground: 45 100% 95%;
+
+    --card: 240 15% 10%;
+    --card-foreground: 45 100% 95%;
+
+    --popover: 240 15% 10%;
+    --popover-foreground: 45 100% 95%;
+
+    --primary: 45 95% 58%;
+    --primary-foreground: 240 20% 10%;
+
+    --secondary: 265 50% 45%;
+    --secondary-foreground: 45 100% 95%;
+
+    --muted: 240 10% 20%;
+    --muted-foreground: 45 20% 70%;
+
+    --accent: 280 60% 55%;
+    --accent-foreground: 45 100% 95%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 45 100% 95%;
+
+    --border: 240 15% 20%;
+    --input: 240 15% 15%;
+    --ring: 45 95% 58%;
+
+    --radius: 1rem;
+
+    /* Cosmic gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(265 50% 45%) 0%, hsl(280 60% 35%) 50%, hsl(240 20% 15%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(45 95% 58%) 0%, hsl(38 92% 50%) 100%);
+    --gradient-mystical: linear-gradient(180deg, hsl(240 20% 6%) 0%, hsl(265 50% 15%) 100%);
+
+    /* Cosmic glow effects */
+    --glow-gold: 0 0 30px hsl(45 95% 58% / 0.4), 0 0 60px hsl(45 95% 58% / 0.2);
+    --glow-purple: 0 0 30px hsl(265 50% 45% / 0.4), 0 0 60px hsl(265 50% 45% / 0.2);
+
+    /* Smooth transitions */
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 20% 6%;
+    --foreground: 45 100% 95%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
-  }
-  #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+    @apply bg-background text-foreground;
   }
 }
 
-/* Animations from App.css */
-@keyframes logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Utility Layer */
 @layer utilities {
-  .bg-gradient-hero {
-    background-image: linear-gradient(180deg, rgba(99,102,241,0.08) 0%, rgba(147,51,234,0.08) 50%, rgba(59,130,246,0.08) 100%);
-  }
-
-  .bg-gradient-cosmic {
-    background-image: linear-gradient(135deg, #6366F1, #8B5CF6, #06B6D4);
-  }
-
   .text-gradient-gold {
-    background-image: linear-gradient(90deg, #FFD700, #F59E0B);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    @apply bg-gradient-to-r from-primary via-yellow-400 to-primary bg-clip-text text-transparent;
   }
 
-  .glow-effect {
-    box-shadow: 0 0 20px rgba(99,102,241,0.3), 0 0 40px rgba(147,51,234,0.2);
+  .glow-gold {
+    box-shadow: var(--glow-gold);
   }
 
-  .cosmic-glow {
-    box-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 30px rgba(99,102,241,0.2);
-  }
-
-  .animate-glow-pulse {
-    animation: glow-pulse 3s infinite ease-in-out;
-  }
-
-  .animate-fade-in-up {
-    animation: fade-in-up 1s ease-out forwards;
+  .glow-purple {
+    box-shadow: var(--glow-purple);
   }
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
 
-  @keyframes glow-pulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); }
+  .animate-spin-slow {
+    animation: spin 20s linear infinite;
   }
 
-  @keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  .animate-spin-slower {
+    animation: spin 30s linear infinite reverse;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
   }
 }
-/* === Lovable Cosmic Hero Animations & Effects === */
 
-/* Keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.8; filter: brightness(1.3); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg) }
+  to { transform: rotate(360deg) }
+}
+
 @keyframes glow-pulse {
   0%, 100% {
     opacity: 0.4;
@@ -219,6 +264,7 @@
   50% {
     transform: translateY(-10px);
   }
+  
 }
 
 /* Animations */

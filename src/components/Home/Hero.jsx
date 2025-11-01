@@ -3,13 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Upload } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/Hooks/use-toast";
 import Image from "next/image";
+import { useToast } from "../Hooks/use-toast";
 
 const Hero = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
   const { toast } = useToast();
+
+
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {

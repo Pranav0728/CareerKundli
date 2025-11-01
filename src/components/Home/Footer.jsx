@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative py-12 px-4 bg-gradient-cosmic overflow-hidden">
+    <footer className="relative py-12 px-4 bg-gradient-cosmic  overflow-hidden">
       {/* Celestial Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-1/4 w-2 h-2 bg-white/30 rounded-full animate-glow-pulse" />

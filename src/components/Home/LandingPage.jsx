@@ -3,13 +3,13 @@ import HowItWorks from "@/components/Home/HowItWorks";
 import Features from "@/components/Home/Features";
 import Testimonials from "@/components/Home/Testimonials";
 import Footer from "@/components/Home/Footer";
-import Navbar from "./Navbar";
+import LandingNavbar from "@/components/Home/LandingNavbar";
 import Pricing from "./Pricing";
 
 const LandingPage = () => {
   return (
     <main className="min-h-screen">
-        <Navbar />
+      <LandingNavbar />
       <Hero />
       <HowItWorks />
       <Features />
