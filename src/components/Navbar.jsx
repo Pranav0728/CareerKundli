@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Sparkles, User } from "lucide-react";
+import { Sparkles, User, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,10 +27,10 @@ const Navbar = () => {
   // ✅ Dynamic dropdown links
   const dropdownItems = [
     { name: "Profile", link: "/profile" },
-    { name: "Settings", link: "/settings" },
+    { name: "History", link: "/history" },
     { name: "Pricing", link: "/pricing" },
   ];
-
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
@@ -82,8 +83,20 @@ const Navbar = () => {
                 ))}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Button onClick={logout} variant="destructive" className="w-full">
-                    Logout
+                  <Button
+                    onClick={async () => {
+                      setIsLoggingOut(true);
+                      try {
+                        await signOut({ callbackUrl: "/" });
+                      } finally {
+                        setIsLoggingOut(false);
+                      }
+                    }}
+                    variant="destructive"
+                    className="w-full"
+                    disabled={isLoggingOut}
+                  >
+                    {isLoggingOut ? <Loader2 className="w-4 h-4 animate-spin" /> : "Logout"}
                   </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -1,56 +1,232 @@
-"use client";
-
-import { useSession } from "next-auth/react";
+"use client"
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sparkles, Star, TrendingUp, FileText, Calendar, User } from "lucide-react";
+import { toast } from "sonner";
 
-export default function ProfilePage() {
-  const { data: session, status } = useSession();
+const Profile = () => {
+  const [user, setUser] = useState({
+    email: "",
+    emailVerified: "",
+    results: [],
+    subscription: {
+      isActive: false,
+      plan: "free"
+    }
+  });
 
-  if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('/api/profile');
+        if (!response.ok) {
+          throw new Error('Failed to fetch profile data');
+        }
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        toast.error('Error loading profile data');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUserProfile();
+  }, []);
 
-  if (status === "unauthenticated") {
+  if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h1 className="text-2xl font-bold mb-4">Please sign in to view your profile</h1>
-        <Link href="/signin" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md">Sign In</Link>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="relative h-32 w-32">
+          <div className="absolute inset-0 rounded-full border-2 border-primary/40 animate-spin-slow" />
+          <div className="absolute inset-2 rounded-full border-2 border-primary/60 animate-spin-slower" />
+          <Star className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-primary animate-pulse" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-white shadow rounded-lg overflow-hidden">
-        <div className="px-4 py-5 sm:px-6 bg-indigo-600">
-          <h3 className="text-lg leading-6 font-medium text-white">User Profile</h3>
-          <p className="mt-1 max-w-2xl text-sm text-indigo-100">Personal details</p>
-        </div>
-        <div className="border-t border-gray-200">
-          <dl>
-            <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Full name</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {session?.user?.name || "Not provided"}
-              </dd>
+    <div className="relative min-h-screen bg-background overflow-hidden">
+      {/* Cosmic Backdrop */}
+      <div className="fixed inset-0 z-0">
+        <img 
+          src="/assets/cosmic-hero.jpg" 
+          alt="Cosmic background" 
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background" />
+      </div>
+
+      {/* Floating stars */}
+      <Star className="fixed top-20 left-10 w-6 h-6 text-primary/30 animate-float" />
+      <Sparkles className="fixed top-40 right-20 w-5 h-5 text-primary/40 animate-pulse-glow" />
+      <Star className="fixed bottom-32 left-1/4 w-4 h-4 text-primary/20 animate-float" />
+      <Sparkles className="fixed bottom-20 right-1/3 w-6 h-6 text-primary/30 animate-pulse-glow" />
+
+      <Navbar />
+
+      <div className="relative z-10 container mx-auto px-4 py-24">
+        {/* Hero Profile Card */}
+        <Card className="max-w-4xl mx-auto mb-8 bg-card/90 backdrop-blur-lg border-primary/20 shadow-xl glow-gold">
+          <CardHeader className="text-center pb-4">
+            <div className="flex justify-center mb-4">
+              <div className="relative">
+                <Avatar className="w-24 h-24 border-2 border-primary/30 shadow-lg">
+                  <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.email)}&backgroundColor=gradient&backgroundType=gradientLinear`} alt={user.email} />
+                  <AvatarFallback className="bg-gradient-cosmic text-4xl font-bold text-secondary-foreground">
+                    {user.email.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-primary-foreground animate-pulse-glow" />
+                </div>
+              </div>
             </div>
-            <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Email address</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {session?.user?.email}
-              </dd>
+            <CardTitle className="text-3xl font-bold text-gradient-gold flex items-center justify-center gap-2">
+              <User className="w-7 h-7 text-primary" />
+              {user.email.split('@')[0]}
+            </CardTitle>
+            <p className="text-muted-foreground mt-2">{user.email}</p>
+            <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary">
+              {user.subscription.plan.charAt(0).toUpperCase() + user.subscription.plan.slice(1)} Plan
             </div>
-          </dl>
-        </div>
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-          <Link
-            href="/"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-          >
-            Back to Home
-          </Link>
-        </div>
+          </CardHeader>
+
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {/* Total Analyses */}
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 border border-primary/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-primary/20">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gradient-gold">{user.results ? user.results.length : 0}</p>
+                    <p className="text-sm text-muted-foreground">Total Analyses</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Subscription Status */}
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 border border-primary/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-primary/20">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gradient-gold">
+                      {user.subscription?.isActive ? "Active" : "Inactive"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Subscription Status</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Member Since */}
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 border border-primary/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-full bg-primary/20">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gradient-gold">
+                      {user.emailVerified ? new Date(user.emailVerified).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : "N/A"}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Member Since</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Details */}
+            <div className="space-y-3 bg-card/50 rounded-lg p-4 border border-border/50">
+              <div className="flex justify-between items-center py-2 border-b border-border/30">
+                <span className="text-sm font-medium text-muted-foreground">Email Address</span>
+                <span className="text-sm font-semibold">{user.email || "N/A"}</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-border/30">
+                <span className="text-sm font-medium text-muted-foreground">Joined Date</span>
+                <span className="text-sm font-semibold">
+                  {user.emailVerified ? new Date(user.emailVerified).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  }) : "N/A"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-border/30">
+                <span className="text-sm font-medium text-muted-foreground">Subscription Plan</span>
+                <span className="text-sm font-semibold capitalize">
+                  {user.subscription?.plan || "Free"}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm font-medium text-muted-foreground">Last Updated</span>
+                <span className="text-sm font-semibold">
+                  {user.updatedAt ? new Date(user.updatedAt).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  }) : "N/A"}
+                </span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 mt-6">
+              <Link href="/" className="flex-1">
+                <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+                  New Analysis
+                </button>
+              </Link>
+              <Link href="/history" className="flex-1">
+                <button className="w-full bg-card border border-primary/30 text-foreground hover:bg-primary/10 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105">
+                  View History
+                </button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Cosmic Achievement Badges */}
+        <Card className="max-w-4xl mx-auto bg-card/90 backdrop-blur-lg border-primary/20 shadow-xl glow-purple">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-primary animate-pulse-glow" />
+              Cosmic Achievements
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20 hover:scale-105 transition-transform duration-300">
+                <div className="text-3xl mb-2">🌟</div>
+                <p className="text-xs font-semibold">First Analysis</p>
+              </div>
+              <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20 hover:scale-105 transition-transform duration-300">
+                <div className="text-3xl mb-2">✨</div>
+                <p className="text-xs font-semibold">10 Analyses</p>
+              </div>
+              <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20 hover:scale-105 transition-transform duration-300 opacity-50">
+                <div className="text-3xl mb-2">🔮</div>
+                <p className="text-xs font-semibold">50 Analyses</p>
+              </div>
+              <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20 hover:scale-105 transition-transform duration-300 opacity-50">
+                <div className="text-3xl mb-2">🌌</div>
+                <p className="text-xs font-semibold">Career Master</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
-}
+};
+
+export default Profile;

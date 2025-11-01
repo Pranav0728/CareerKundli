@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Upload, Sparkles, Star, Orbit, Zap, TrendingUp } from "lucide-react";
-import { useToast } from "@/components/Hooks/use-toast";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 
 const Dashboard = () => {
@@ -12,7 +12,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [dragActive, setDragActive] = useState(false);
-  const { toast } = useToast();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -33,15 +32,9 @@ const Dashboard = () => {
       const droppedFile = e.dataTransfer.files[0];
       if (droppedFile.type === "application/pdf") {
         setFile(droppedFile);
-        toast({
-          title: "Resume uploaded successfully!",
-          variant: "default",
-        });
+        toast.success("Resume uploaded successfully!");
       } else {
-        toast({
-          title: "Please upload a PDF file",
-          variant: "destructive",
-        });
+        toast.error("Please upload a PDF file");
       }
     }
   };
@@ -51,25 +44,16 @@ const Dashboard = () => {
       const selectedFile = e.target.files[0];
       if (selectedFile.type === "application/pdf") {
         setFile(selectedFile);
-        toast({
-          title: "Resume uploaded successfully!",
-          variant: "default",
-        });
+        toast.success("Resume uploaded successfully!");
       } else {
-        toast({
-          title: "Please upload a PDF file",
-          variant: "destructive",
-        });
+        toast.error("Please upload a PDF file");
       }
     }
   };
 
   const handleAnalyze = async () => {
     if (!file) {
-      toast({
-        title: "Please upload your resume first!",
-        variant: "destructive",
-      });
+      toast.error("Please upload your resume first!");
       return;
     }
 
@@ -95,10 +79,7 @@ const Dashboard = () => {
 
       // The API returns { id, result } where result contains the analysis
       setResult(data.result);
-      toast({
-        title: "Career Kundali generated!",
-        variant: "default",
-      });
+      toast.success("Career Kundli generated!");
       
       // Optional: Store the report ID for future reference
       if (data.id) {
@@ -152,8 +133,8 @@ const Dashboard = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-12 mt-16">
         {/* Hero Section */}
-        <div className="text-center mb-16 animate-float">
-          <div className="inline-block mb-6">
+        <div className="text-center mb-4 animate-float">
+          <div className="inline-block mb-2">
             <img
               src="/assets/zodiac-wheel-rbg.png"
               alt="Zodiac"
@@ -161,7 +142,7 @@ const Dashboard = () => {
             />
           </div>
           <h1 className="text-5xl md:text-7xl font-bold mb-4 text-gradient-gold">
-            Career Kundali
+            Career Kundli
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
             Unveil your professional destiny through cosmic intelligence
@@ -198,7 +179,7 @@ const Dashboard = () => {
               />
 
               <div className="text-center">
-                <Upload className="w-16 h-16 text-primary mx-auto mb-4" />
+                <Upload className="w-8 h-8 text-primary mx-auto mb-4" />
                 {file ? (
                   <div>
                     <p className="text-lg font-semibold text-primary mb-2">
@@ -236,7 +217,7 @@ const Dashboard = () => {
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5 mr-2" />
-                    Generate Career Kundali
+                    Generate Career Kundli
                   </>
                 )}
               </Button>

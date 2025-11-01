@@ -4,31 +4,27 @@ import { Sparkles, Upload } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useToast } from "../Hooks/use-toast";
+import { toast } from "sonner";
 
 const Hero = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
-  const { toast } = useToast();
 
 
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
-      toast({
-        title: "Resume uploaded!",
-        description: "Click 'Generate Destiny' to continue",
+      toast.success("Resume uploaded!", {
+        description: "Click 'Generate Destiny' to continue"
       });
     }
   };
 
   const handleGenerateDestiny = () => {
     if (!selectedFile) {
-      toast({
-        title: "Please upload your resume",
-        description: "We need your resume to analyze your career destiny",
-        variant: "destructive",
+      toast.error("Please upload your resume", {
+        description: "We need your resume to analyze your career destiny"
       });
       return;
     }

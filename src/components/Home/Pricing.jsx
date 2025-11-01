@@ -9,43 +9,27 @@ const Pricing = () => {
       price: "₹0",
       period: "forever",
       features: [
-        "1 Career Kundli Analysis",
-        "Basic AI Insights",
-        "Zodiac Career Match",
-        "Email Support"
+        "2 Career Kundli Analyses / month",
+        "Basic AI + Astrology Insights",
+        "Limited Job Market Data",
+        "Basic Skill Recommendations"
       ],
       cta: "Start Free",
       popular: false
     },
     {
-      name: "Career Seeker",
-      price: "₹999",
+      name: "Career Pro",
+      price: "₹99",
       period: "per month",
       features: [
-        "Unlimited Career Analysis",
-        "Advanced AI + Astrology Insights",
-        "Personalized Growth Roadmap",
-        "Weekly Career Guidance",
-        "Priority Support",
-        "Career Compatibility Reports"
+        "Unlimited Career Analyses",
+        "Live Job Market Insights",
+        "AI-Generated Career Roadmap",
+        "Shareable PDF Reports",
+        "Priority Support"
       ],
-      cta: "Get Started",
+      cta: "Upgrade Now",
       popular: true
-    },
-    {
-      name: "Destiny Master",
-      price: "₹4,999",
-      period: "lifetime",
-      features: [
-        "Everything in Career Seeker",
-        "1-on-1 Astrologer Consultation",
-        "Custom Career Strategy",
-        "Lifetime Updates",
-        "API Access",
-        "White-label Option"
-      ],
-      cta: "Go Premium",
-      popular: false
     }
   ];
 
@@ -54,16 +38,16 @@ const Pricing = () => {
       <div className="container mx-auto">
         <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Choose Your <span className="text-gradient-gold">Destiny Path</span>
+            Choose Your <span className="text-gradient-gold">Career Path</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Invest in your career future with our AI-powered astrology guidance
+            Unlock your potential with AI-powered astrology insights and live market data
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
-            <Card 
+            <Card
               key={index}
               className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
                 plan.popular 
@@ -76,7 +60,7 @@ const Pricing = () => {
                   MOST POPULAR
                 </div>
               )}
-              
+
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                 <div className="mb-6">

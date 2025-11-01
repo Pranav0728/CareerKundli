@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 export default function UserAuthFormSignin() {
   const [email, setEmail] = useState("");
@@ -121,6 +122,7 @@ export default function UserAuthFormSignin() {
             cursor: "pointer",
           }}
         >
+          {loading && <Loader2 className="w-4 h-4 animate-spin" />}
           {loading ? "Signing in..." : "Login"}
         </button>
       </form>
@@ -141,6 +143,7 @@ export default function UserAuthFormSignin() {
           cursor: "pointer",
         }}
       >
+        {gLoading && <Loader2 className="w-4 h-4 animate-spin" />}
         {gLoading ? "Connecting..." : "Sign in with Google"}
       </button>
 
@@ -157,6 +160,7 @@ export default function UserAuthFormSignin() {
           cursor: "pointer",
         }}
       >
+        {ghLoading && <Loader2 className="w-4 h-4 animate-spin" />}
         {ghLoading ? "Connecting..." : "Sign in with GitHub"}
       </button>
     </div>

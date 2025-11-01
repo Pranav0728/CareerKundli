@@ -8,16 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles } from "lucide-react";
-import { useToast } from "@/components/Hooks/use-toast";
+import { Sparkles, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [gLoading, setGLoading] = useState(false);
+  const [ghLoading, setGhLoading] = useState(false);
   const [error, setError] = useState("");
-  const { toast } = useToast();
 
   useEffect(() => {
     if (session) router.push("/");
@@ -38,8 +39,23 @@ export default function SignIn() {
     }
   };
 
-  const handleGoogle = async () => await signIn("google", { callbackUrl: "/" });
-  const handleGithub = async () => await signIn("github", { callbackUrl: "/" });
+  const handleGoogle = async () => {
+    setGLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } finally {
+      setGLoading(false);
+    }
+  };
+
+  const handleGithub = async () => {
+    setGhLoading(true);
+    try {
+      await signIn("github", { callbackUrl: "/" });
+    } finally {
+      setGhLoading(false);
+    }
+  };
 
   if (status === "loading") return <p className="text-center mt-10">Loading...</p>;
 
@@ -53,6 +69,7 @@ export default function SignIn() {
           fill
           className="object-cover"
           priority
+          opacity={1}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40" />
       </div>
@@ -98,7 +115,7 @@ export default function SignIn() {
                 size="lg"
                 disabled={loading}
               >
-                {loading ? "Sending link..." : "Send Magic Link"}
+                {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Send Magic Link"}
               </Button>
             </form>
 
@@ -109,11 +126,11 @@ export default function SignIn() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Button onClick={handleGoogle} variant="outline">
-                Continue with Google
+              <Button onClick={handleGoogle} variant="outline" disabled={gLoading || loading}>
+                {gLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Continue with Google"}
               </Button>
-              <Button onClick={handleGithub} variant="outline">
-                Continue with GitHub
+              <Button onClick={handleGithub} variant="outline" disabled={ghLoading || loading}>
+                {ghLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Continue with GitHub"}
               </Button>
             </div>
 

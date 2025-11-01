@@ -81,7 +81,7 @@ export default async function Result({ params }) {
           </Link>
           <h1 className="text-4xl md:text-5xl font-bold text-gradient-gold mb-2 flex items-center gap-3">
             <Sparkles className="w-10 h-10 text-primary animate-pulse-glow" />
-            Your Career Kundali
+            Your Career Kundli
           </h1>
           <p className="text-muted-foreground text-lg">
             Generated on{" "}
