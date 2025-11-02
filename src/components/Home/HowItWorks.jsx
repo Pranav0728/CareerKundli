@@ -1,20 +1,20 @@
-import { UserCircle, Brain, TrendingUp } from "lucide-react";
+import { Upload, Sparkles, FileCheck } from "lucide-react";
 
 const steps = [
   {
-    icon: UserCircle,
-    title: "Upload Your Resume",
-    description: "Simply upload your resume — our AI analyzes your skills, experience, and career patterns.",
+    icon: Upload,
+    title: "Upload Resume",
+    description: "Upload your resume in PDF or DOC format",
   },
   {
-    icon: Brain,
-    title: "AI Meets Astrology",
-    description: "AI + Astrology combine with live job market data to find your ideal path.",
+    icon: Sparkles,
+    title: "AI Analysis",
+    description: "AI analyzes your skills, experience, and career trajectory",
   },
   {
-    icon: TrendingUp,
-    title: "Discover Your Destiny",
-    description: "Get your personalized Career Kundli and future career insights.",
+    icon: FileCheck,
+    title: "Get Career Kundli",
+    description: "Receive growth score, skill gaps, and personalized roadmap",
   },
 ];
 

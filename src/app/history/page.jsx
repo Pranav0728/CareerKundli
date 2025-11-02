@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, Star, TrendingUp, Calendar, ArrowRight } from "lucide-react";
+import { Sparkles, Star, TrendingUp, Calendar, ArrowRight, Clock, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
@@ -178,6 +178,7 @@ const History = () => {
                     </div>
                   </div>
 
+                  
                   {/* View Details Button */}
                   <Link href={`/result/${report._id}`}>
                     <Button variant="ghost" className="w-full gap-2 group-hover:bg-primary/10 group-hover:text-primary">

@@ -1,21 +1,21 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Sparkles, Target, LineChart } from "lucide-react";
+import { Sparkles, Target, LineChart, FileText, TrendingUp, Map } from "lucide-react";
 
 const features = [
   {
-    icon: Sparkles,
-    title: "AI + Astrology Integration",
-    description: "Powerful combination of machine learning algorithms and ancient astrological wisdom to provide accurate career insights.",
+    icon: FileText,
+    title: "Resume Analysis",
+    description: "Upload your resume and get instant AI-powered analysis of your skills, roles, education, and achievements.",
   },
   {
-    icon: Target,
-    title: "Career Insights",
-    description: "Get detailed analysis of your ideal career paths, work environment preferences, and professional strengths based on your chart.",
+    icon: TrendingUp,
+    title: "Growth Score & Next Roles",
+    description: "Discover your career growth potential and personalized recommendations for your next career moves.",
   },
   {
-    icon: LineChart,
-    title: "Skill Growth Path",
-    description: "Receive personalized roadmap for skill development aligned with your natural talents and cosmic timing.",
+    icon: Map,
+    title: "Career Roadmap",
+    description: "Get a detailed short, mid, and long-term roadmap with actionable steps to reach your career goals.",
   },
 ];
 

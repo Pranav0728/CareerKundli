@@ -5,10 +5,9 @@ import { getGroqModel } from "./groq";
 function parseJSON(text) {
   if (!text) return {};
   if (typeof text !== "string") {
-    // handle cases where LLM returns { text: "..." } or nested structure
     if (typeof text.text === "string") text = text.text;
     else if (typeof text.output === "string") text = text.output;
-    else return text; // already an object, return as-is
+    else return text;
   }
 
   try {
@@ -23,7 +22,6 @@ function parseJSON(text) {
     return {};
   }
 }
-
 
 export async function analyzeResumeText(resumeText) {
   const llm = getGroqModel();
@@ -43,9 +41,10 @@ Resume:
   const analyzerResp = await analyzerChain.invoke({ resumeText });
   const analysis = parseJSON(analyzerResp);
 
-  // 2️⃣ Prediction Chain
+  // 2️⃣ Career Prediction Chain
   const predictorPrompt = new PromptTemplate({
     template: `You are CareerPredictorAgent. Use the analysis JSON to predict next roles, growth score (0-100), and skill gaps. 
+Also, consider real-world tech & job market trends (2025 context). 
 Output strict JSON with keys: next_roles (array of strings), growth_score (number), skill_gaps (array of strings). 
 Only output JSON.
 
@@ -86,5 +85,65 @@ Only output the narrative, no JSON.`,
       ? narratorResp.trim()
       : narratorResp?.text?.trim?.() || narratorResp;
 
-  return { analysis, prediction, horoscope };
+  // 4️⃣ Career Roadmap Generator
+const roadmapPrompt = new PromptTemplate({
+  template: `
+You are **CareerRoadmapPlannerAgent**. Based on the provided user's skills, skill gaps, and next roles,
+generate a **personalized career roadmap** for professional growth.
+
+You MUST follow this exact structure and variable names in your JSON output.
+
+**Output Format (strictly this structure):**
+{{
+  "short_term": [
+    {{
+      "title": "string — concise title of the action step",
+      "description": "string — what to do and why it matters",
+      "duration": "string — expected time (e.g., 2 weeks)",
+      "outcome": "string — measurable result or benefit"
+    }}
+  ],
+  "mid_term": [
+    {{
+      "title": "string",
+      "description": "string",
+      "duration": "string",
+      "outcome": "string"
+    }}
+  ],
+  "long_term": [
+    {{
+      "title": "string",
+      "description": "string",
+      "duration": "string",
+      "outcome": "string"
+    }}
+  ]
+}}
+
+🧠 **Guidelines:**
+- Do **not** include explanations, markdown, or extra text — return **only the valid JSON**.
+- Each array must contain 3–5 action steps.
+- Use 2025 job market and emerging tech trends as context.
+- Ensure actions are **achievable**, **specific**, and **skill-growth-oriented**.
+
+**Analysis JSON:**
+{analysisJson}
+
+**Prediction JSON:**
+{predictionJson}
+`,
+  inputVariables: ["analysisJson", "predictionJson"],
+});
+
+
+  const roadmapChain = RunnableSequence.from([roadmapPrompt, llm]);
+  const roadmapResp = await roadmapChain.invoke({
+    analysisJson: JSON.stringify(analysis),
+    predictionJson: JSON.stringify(prediction),
+  });
+
+  const roadmap = parseJSON(roadmapResp);
+
+  return { analysis, prediction, horoscope, roadmap };
 }

@@ -3,7 +3,18 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Upload, Sparkles, Star, Orbit, Zap, TrendingUp } from "lucide-react";
+import {
+  Upload,
+  Sparkles,
+  Star,
+  Orbit,
+  Zap,
+  TrendingUp,
+  Clock,
+  Calendar,
+  Target,
+  ArrowRight,
+} from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 
@@ -30,24 +41,38 @@ const Dashboard = () => {
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFile = e.dataTransfer.files[0];
-      if (droppedFile.type === "application/pdf") {
-        setFile(droppedFile);
-        toast.success("Resume uploaded successfully!");
-      } else {
+
+      if (droppedFile.type !== "application/pdf") {
         toast.error("Please upload a PDF file");
+        return;
       }
+
+      if (droppedFile.size > 5 * 1024 * 1024) {
+        toast.error("File size should not exceed 5MB");
+        return;
+      }
+
+      setFile(droppedFile);
+      toast.success("Resume uploaded successfully!");
     }
   };
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      if (selectedFile.type === "application/pdf") {
-        setFile(selectedFile);
-        toast.success("Resume uploaded successfully!");
-      } else {
+
+      if (selectedFile.type !== "application/pdf") {
         toast.error("Please upload a PDF file");
+        return;
       }
+
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        toast.error("File size should not exceed 5MB");
+        return;
+      }
+
+      setFile(selectedFile);
+      toast.success("Resume uploaded successfully!");
     }
   };
 
@@ -71,16 +96,18 @@ const Dashboard = () => {
         body: formData,
       });
 
+      console.log("data", response);
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Analysis failed");
+        toast.error(data.error || "Analysis failed");
+        return;
       }
-
+      console.log("data.result", data.result);
       // The API returns { id, result } where result contains the analysis
       setResult(data.result);
       toast.success("Career Kundli generated!");
-      
+
       // Optional: Store the report ID for future reference
       if (data.id) {
         console.log("Report saved with ID:", data.id);
@@ -103,7 +130,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <Navbar/>
+      <Navbar />
       {/* Cosmic Background */}
       <div className="fixed inset-0 z-0">
         <img
@@ -241,7 +268,8 @@ const Dashboard = () => {
                   Aligning the Cosmic Threads
                 </h3>
                 <p className="text-lg text-muted-foreground">
-                  The universe is mapping your skills to the celestial patterns...
+                  The universe is mapping your skills to the celestial
+                  patterns...
                 </p>
               </div>
             </div>
@@ -301,14 +329,8 @@ const Dashboard = () => {
                           x2="100%"
                           y2="0%"
                         >
-                          <stop
-                            offset="0%"
-                            stopColor="hsl(45, 95%, 58%)"
-                          />
-                          <stop
-                            offset="100%"
-                            stopColor="hsl(38, 92%, 50%)"
-                          />
+                          <stop offset="0%" stopColor="hsl(45, 95%, 58%)" />
+                          <stop offset="100%" stopColor="hsl(38, 92%, 50%)" />
                         </linearGradient>
                       </defs>
                       <circle
@@ -391,7 +413,9 @@ const Dashboard = () => {
 
                 <div className="space-y-5">
                   <div>
-                    <h4 className="font-semibold mb-2 text-primary">✦ Skills</h4>
+                    <h4 className="font-semibold mb-2 text-primary">
+                      ✦ Skills
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {result.analysis.skills.map((skill, i) => (
                         <span
@@ -405,7 +429,9 @@ const Dashboard = () => {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold mb-2 text-secondary">✦ Roles</h4>
+                    <h4 className="font-semibold mb-2 text-secondary">
+                      ✦ Roles
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {result.analysis.roles.map((role, i) => (
                         <span
@@ -419,7 +445,9 @@ const Dashboard = () => {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold mb-2 text-primary">✦ Education</h4>
+                    <h4 className="font-semibold mb-2 text-primary">
+                      ✦ Education
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {result.analysis.education.map((edu, i) => (
                         <span
@@ -450,6 +478,119 @@ const Dashboard = () => {
                 </div>
               </Card>
             </div>
+
+            {/* Career Roadmap Section */}
+            {result?.roadmap && (
+              <div className="mt-12">
+                <h2 className="text-3xl font-bold mb-6 text-gradient-gold text-center">
+                  Your Cosmic Career Roadmap
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Short-Term */}
+                  <Card className="p-6 bg-card/80 backdrop-blur-xl border-primary/20 hover:glow-gold transition-all">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Clock className="w-6 h-6 text-primary" />
+                      <h3 className="text-xl font-bold">Short-Term</h3>
+                      <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
+                        0–3 months
+                      </span>
+                    </div>
+                    <ul className="space-y-3">
+                      {result.roadmap.short_term.map((step, i) => (
+                        <li key={`st-${i}`} className="flex gap-2 items-start">
+                          <div className="min-w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary mt-0.5">
+                            {i + 1}
+                          </div>
+                          <div className="text-sm">
+                            <p className="font-semibold text-primary">
+                              {step.title}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {step.description}
+                            </p>
+                            <p className="text-xs text-secondary mt-1">
+                              Duration: {step.duration}
+                            </p>
+                            <p className="text-xs text-green-400 mt-0.5">
+                              Outcome: {step.outcome}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+
+                  {/* Mid-Term */}
+                  <Card className="p-6 bg-card/80 backdrop-blur-xl border-secondary/20 hover:glow-purple transition-all">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Calendar className="w-6 h-6 text-secondary" />
+                      <h3 className="text-xl font-bold">Mid-Term</h3>
+                      <span className="text-xs bg-secondary/20 text-secondary px-2 py-1 rounded-full">
+                        3–9 months
+                      </span>
+                    </div>
+                    <ul className="space-y-3">
+                      {result.roadmap.mid_term.map((step, i) => (
+                        <li key={`mt-${i}`} className="flex gap-2 items-start">
+                          <div className="min-w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center text-xs text-secondary mt-0.5">
+                            {i + 1}
+                          </div>
+                          <div className="text-sm">
+                            <p className="font-semibold text-secondary">
+                              {step.title}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {step.description}
+                            </p>
+                            <p className="text-xs text-secondary mt-1">
+                              Duration: {step.duration}
+                            </p>
+                            <p className="text-xs text-green-400 mt-0.5">
+                              Outcome: {step.outcome}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+
+                  {/* Long-Term */}
+                  <Card className="p-6 bg-card/80 backdrop-blur-xl border-accent/20 hover:glow-purple transition-all">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Target className="w-6 h-6 text-accent" />
+                      <h3 className="text-xl font-bold">Long-Term</h3>
+                      <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">
+                        9–18 months
+                      </span>
+                    </div>
+                    <ul className="space-y-3">
+                      {result.roadmap.long_term.map((step, i) => (
+                        <li key={`lt-${i}`} className="flex gap-2 items-start">
+                          <div className="min-w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center text-xs text-accent mt-0.5">
+                            {i + 1}
+                          </div>
+                          <div className="text-sm">
+                            <p className="font-semibold text-accent">
+                              {step.title}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {step.description}
+                            </p>
+                            <p className="text-xs text-secondary mt-1">
+                              Duration: {step.duration}
+                            </p>
+                            <p className="text-xs text-green-400 mt-0.5">
+                              Outcome: {step.outcome}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
