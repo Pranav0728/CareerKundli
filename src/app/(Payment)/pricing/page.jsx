@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
+
 export default function PricingPage() {
   const [currency, setCurrency] = useState("INR");
   const [amount, setAmount] = useState(99); // default INR price
@@ -102,8 +103,7 @@ export default function PricingPage() {
               <ul className="space-y-3 text-left mb-8">
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>1 free analyses/month</li>
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Basic AI + Astrology Insights</li>
-                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Career Path Recommendations</li>
-                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Personalized AI roadmap</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Career Path Recommendations</li>                
               </ul>
               <Link href={'/analyze'}>
                 <Button variant="outline" className="w-full">Start Free</Button>
@@ -122,6 +122,8 @@ export default function PricingPage() {
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Unlimited career analyses</li>
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Live job market data</li>
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Personalized AI roadmap</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Shareable PDF reports</li>
+                
               </ul>
               <Button className="w-full" onClick={handlePayment}>
                 Subscribe Now
