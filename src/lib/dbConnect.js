@@ -3,9 +3,6 @@ import { MongoClient } from "mongodb";
 
 const MONGODB_URL = process.env.MONGODB_URI;
 
-if (!MONGODB_URL) {
-  throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
-}
 
 /* -------------------- MONGOOSE SETUP -------------------- */
 let cachedMongoose = global.mongoose;
