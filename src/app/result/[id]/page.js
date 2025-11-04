@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Report from "@/lib/models/Report";
-import { connectDB } from "@/lib/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 
 export default async function Result({ params }) {
   const { id } = await params;
 
   // Connect to DB and fetch report
-  await connectDB();
+  await dbConnect();
   const report = await Report.findById(id).lean();
 
   if (!report) {
