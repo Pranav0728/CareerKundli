@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Report from "@/lib/models/Report";
-import { connectDB } from "@/lib/db";
+import { connectDB } from "@/lib/dbConnect";
 
 export default async function Result({ params }) {
   const { id } = await params;
