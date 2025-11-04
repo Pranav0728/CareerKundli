@@ -23,7 +23,7 @@ export async function middleware(req) {
 
   return NextResponse.next();
 }
-
+//ntg
 export const config = {
   matcher: ["/", "/analyze/:path*", "/history/:path*", "/profile/:path*", "/pricing/:path*"],
 };
