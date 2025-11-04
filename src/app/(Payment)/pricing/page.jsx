@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Script from "next/script";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 export default function PricingPage() {
   const [currency, setCurrency] = useState("INR");
@@ -104,7 +105,9 @@ export default function PricingPage() {
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Career Path Recommendations</li>
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Personalized AI roadmap</li>
               </ul>
-              <Button variant="outline" className="w-full">Start Free</Button>
+              <Link href={'/analyze'}>
+                <Button variant="outline" className="w-full">Start Free</Button>
+              </Link>
             </CardContent>
           </Card>
 

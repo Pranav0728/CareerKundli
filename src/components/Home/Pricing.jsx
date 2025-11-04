@@ -14,7 +14,7 @@ const Pricing = () => {
       price: "₹0",
       period: "forever",
       features: [
-        "2 Career Kundli Analyses / month",
+        "1 Career Kundli Analyses",
         "Basic AI + Astrology Insights",
         "Limited Job Market Data",
         "Basic Skill Recommendations"
