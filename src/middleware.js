@@ -26,5 +26,6 @@ export const config = {
     "/history/:path*",
     "/profile/:path*",
     "/pricing/:path*",
+    "/((?!api/auth).*)"
   ],
 };
