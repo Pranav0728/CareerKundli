@@ -24,9 +24,11 @@ function parseJSON(text) {
 }
 
 export async function analyzeResumeText(resumeText) {
-  const llm = getGroqModel();
+  // ✅ Use different models for each step
+  const fastModel = getGroqModel("fast");       // Llama 3.1 8B Instant
+  const creativeModel = getGroqModel("creative"); // Llama 3.3 70B Versatile
 
-  // 1️⃣ Resume Analysis Chain
+  // 1️⃣ Resume Analysis Chain (FAST)
   const analyzerPrompt = new PromptTemplate({
     template: `You are ResumeAnalyzerAgent. Given the resume text, extract structured info as strict JSON with keys: 
 skills (array of strings), roles (array of strings), education (array of strings), achievements (array of strings). 
@@ -37,11 +39,11 @@ Resume:
     inputVariables: ["resumeText"],
   });
 
-  const analyzerChain = RunnableSequence.from([analyzerPrompt, llm]);
+  const analyzerChain = RunnableSequence.from([analyzerPrompt, fastModel]);
   const analyzerResp = await analyzerChain.invoke({ resumeText });
   const analysis = parseJSON(analyzerResp);
 
-  // 2️⃣ Career Prediction Chain
+  // 2️⃣ Career Prediction Chain (FAST)
   const predictorPrompt = new PromptTemplate({
     template: `You are CareerPredictorAgent. Use the analysis JSON to predict next roles, growth score (0-100), and skill gaps. 
 Also, consider real-world tech & job market trends (2025 context). 
@@ -53,13 +55,13 @@ Analysis JSON:
     inputVariables: ["analysisJson"],
   });
 
-  const predictorChain = RunnableSequence.from([predictorPrompt, llm]);
+  const predictorChain = RunnableSequence.from([predictorPrompt, fastModel]);
   const predictorResp = await predictorChain.invoke({
     analysisJson: JSON.stringify(analysis),
   });
   const prediction = parseJSON(predictorResp);
 
-  // 3️⃣ Horoscope Narration Chain
+  // 3️⃣ Horoscope Narration Chain (CREATIVE)
   const narratorPrompt = new PromptTemplate({
     template: `You are AstroNarratorAgent. Craft a short, uplifting "career horoscope" styled message (120–200 words)
 based on the analysis and prediction JSON. Address the user as "You".
@@ -74,7 +76,7 @@ Only output the narrative, no JSON.`,
     inputVariables: ["analysisJson", "predictionJson"],
   });
 
-  const narratorChain = RunnableSequence.from([narratorPrompt, llm]);
+  const narratorChain = RunnableSequence.from([narratorPrompt, creativeModel]);
   const narratorResp = await narratorChain.invoke({
     analysisJson: JSON.stringify(analysis),
     predictionJson: JSON.stringify(prediction),
@@ -85,9 +87,9 @@ Only output the narrative, no JSON.`,
       ? narratorResp.trim()
       : narratorResp?.text?.trim?.() || narratorResp;
 
-  // 4️⃣ Career Roadmap Generator
-const roadmapPrompt = new PromptTemplate({
-  template: `
+  // 4️⃣ Career Roadmap Generator (CREATIVE)
+  const roadmapPrompt = new PromptTemplate({
+    template: `
 You are **CareerRoadmapPlannerAgent**. Based on the provided user's skills, skill gaps, and next roles,
 generate a **personalized career roadmap** for professional growth.
 
@@ -133,11 +135,10 @@ You MUST follow this exact structure and variable names in your JSON output.
 **Prediction JSON:**
 {predictionJson}
 `,
-  inputVariables: ["analysisJson", "predictionJson"],
-});
+    inputVariables: ["analysisJson", "predictionJson"],
+  });
 
-
-  const roadmapChain = RunnableSequence.from([roadmapPrompt, llm]);
+  const roadmapChain = RunnableSequence.from([roadmapPrompt, creativeModel]);
   const roadmapResp = await roadmapChain.invoke({
     analysisJson: JSON.stringify(analysis),
     predictionJson: JSON.stringify(prediction),
@@ -145,5 +146,6 @@ You MUST follow this exact structure and variable names in your JSON output.
 
   const roadmap = parseJSON(roadmapResp);
 
+  // ✅ Return final structured result
   return { analysis, prediction, horoscope, roadmap };
 }

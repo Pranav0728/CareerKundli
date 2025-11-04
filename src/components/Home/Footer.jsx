@@ -30,9 +30,6 @@ const Footer = () => {
           <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm">
             <a href="#" className="text-white/70 hover:text-white transition-colors">About</a>
             <a href="#" className="text-white/70 hover:text-white transition-colors">Features</a>
-            <a href="#" className="text-white/70 hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="text-white/70 hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="text-white/70 hover:text-white transition-colors">Contact</a>
           </div>
           
           {/* Copyright */}

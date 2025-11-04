@@ -1,8 +1,8 @@
 "use client";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Navbar from "@/components/Navbar";
+import { useState, useEffect } from "react";
 import {
   Upload,
   Sparkles,
@@ -16,13 +16,36 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { toast } from "sonner";
-import Navbar from "@/components/Navbar";
+import Link from "next/link";
+import FloatingSparkles from "@/components/ui/FloatingStar";
 
 const Dashboard = () => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [sparkles, setSparkles] = useState([]);
+
+  useEffect(() => {
+    // Generate random positions only on client
+    const newSparkles = [...Array(20)].map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 3}s`,
+    }));
+    setSparkles(newSparkles);
+  }, []);
+    useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          setProfile(await res.json());
+        }
+      } catch {}
+    })();
+  }, []);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -33,6 +56,13 @@ const Dashboard = () => {
       setDragActive(false);
     }
   };
+  const isPro =
+    profile?.subscription?.isActive &&
+    profile?.subscription?.renewDate &&
+    new Date(profile.subscription.renewDate).getTime() > Date.now();
+
+  const hasUsedFree = (profile?.results?.length || 0) >= 1;
+  const blocked = !isPro && hasUsedFree;
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -76,48 +106,36 @@ const Dashboard = () => {
     }
   };
 
-  const handleAnalyze = async () => {
+ const handleAnalyze = async () => {
+    if (blocked) {
+      toast.error("Your free analysis is used. Upgrade to Pro for unlimited analyses.");
+      return;
+    }
     if (!file) {
       toast.error("Please upload your resume first!");
       return;
     }
-
     try {
       setLoading(true);
       setResult(null);
-
-      // Create FormData to send the file
       const formData = new FormData();
       formData.append("file", file);
-
-      // Call the analyze API
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        body: formData,
-      });
-
-      console.log("data", response);
+      const response = await fetch("/api/analyze", { method: "POST", body: formData });
       const data = await response.json();
-
       if (!response.ok) {
-        toast.error(data.error || "Analysis failed");
+        if (response.status === 402) {
+          toast.error("Subscription required", {
+            description: "Upgrade to Pro for unlimited analyses.",
+          });
+        } else {
+          toast.error(data.error || "Analysis failed");
+        }
         return;
       }
-      console.log("data.result", data.result);
-      // The API returns { id, result } where result contains the analysis
       setResult(data.result);
       toast.success("Career Kundli generated!");
-
-      // Optional: Store the report ID for future reference
-      if (data.id) {
-        console.log("Report saved with ID:", data.id);
-      }
     } catch (err) {
-      console.error("Analysis error:", err);
-      toast({
-        title: err.message || "Something went wrong. Please try again!",
-        variant: "destructive",
-      });
+      // ... existing code ...
     } finally {
       setLoading(false);
     }
@@ -129,8 +147,28 @@ const Dashboard = () => {
   const offset = circumference * (1 - growthScore / 100);
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden ">
       <Navbar />
+      {!result && blocked && (
+        <div className="relative z-10 container mx-auto px-4 pt-20">
+          <section className="rounded-xl border border-border bg-card p-6 shadow-lg opacity-100">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg sm:text-xl font-semibold">
+                  You’ve used your free analysis.
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Upgrade to Pro to continue exploring your career roadmap.
+                </p>
+              </div>
+              <Link href="/pricing">
+                <Button className="shrink-0">Upgrade to Pro</Button>
+              </Link>
+            </div>
+          </section>
+        </div>
+      )}
+
       {/* Cosmic Background */}
       <div className="fixed inset-0 z-0">
         <img
@@ -142,21 +180,7 @@ const Dashboard = () => {
       </div>
 
       {/* Floating Stars */}
-      {/* <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-pulse-glow"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
-          >
-            <Sparkles className="w-4 h-4 text-primary/60" />
-          </div>
-        ))}
-      </div> */}
+      <FloatingSparkles/>
 
       <div className="relative z-10 container mx-auto px-4 py-12 mt-16">
         {/* Hero Section */}

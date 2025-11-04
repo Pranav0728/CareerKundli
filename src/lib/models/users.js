@@ -11,9 +11,12 @@ const UserSchema = new mongoose.Schema(
     subscription: {
       isActive: { type: Boolean, default: false },
       plan: { type: String, enum: ["free", "pro", "enterprise"], default: "free" },
-      razorpayCustomerId: { type: String }, // or Razorpay/PayPal ID
-      subscriptionId: { type: String },   // external subscription ref
+      razorpayCustomerId: { type: String },
+      subscriptionId: { type: String }, // payment or order ref
+      startDate: { type: Date },
       renewDate: { type: Date },
+      currency: { type: String, enum: ["INR", "USD"], default: "INR" },
+      amount: { type: Number, default: 0 }, // ₹99 or $2
     },
 
     // ✅ Connect to Results

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, User, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -31,6 +31,25 @@ const Navbar = () => {
     { name: "Pricing", link: "/pricing" },
   ];
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/profile");
+        if (res.ok) {
+          const data = await res.json();
+          setProfile(data);
+        }
+      } catch {}
+    })();
+  }, []);
+
+  const isPro =
+    profile?.subscription?.isActive &&
+    profile?.subscription?.renewDate &&
+    new Date(profile.subscription.renewDate).getTime() > Date.now();
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
@@ -62,13 +81,16 @@ const Navbar = () => {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="focus:outline-none">
-                  <Avatar className="w-9 h-9 border border-border hover:ring-2 hover:ring-primary transition-all">
+                <button className="focus:outline-none relative">
+                  <Avatar className={`w-9 h-9 border ${isPro ? "ring-2 ring-offset-2 ring-yellow-400 ring-offset-background" : "border-border"} transition-all`}>
                     <AvatarImage src="/avatar.png" alt="User Avatar" />
                     <AvatarFallback>
                       <User className="w-4 h-4 text-muted-foreground" />
                     </AvatarFallback>
                   </Avatar>
+                  {isPro && (
+                    <span className="absolute -top-1 -right-1 text-[10px] px-2 py-0.5 rounded-full bg-yellow-400 text-black font-bold shadow">PRO</span>
+                  )}
                 </button>
               </DropdownMenuTrigger>
 
@@ -81,6 +103,14 @@ const Navbar = () => {
                     </DropdownMenuItem>
                   </div>
                 ))}
+                {!isPro && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/pricing">Upgrade to Pro</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Button

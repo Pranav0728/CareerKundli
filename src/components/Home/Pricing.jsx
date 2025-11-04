@@ -1,8 +1,13 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const Pricing = () => {
+  const [currency, setCurrency] = useState("INR");
+  const [amount, setAmount] = useState("₹99");
   const plans = [
     {
       name: "Free Explorer",
@@ -19,7 +24,7 @@ const Pricing = () => {
     },
     {
       name: "Career Pro",
-      price: "₹99",
+      price: amount,
       period: "per month",
       features: [
         "Unlimited Career Analyses",
@@ -32,6 +37,37 @@ const Pricing = () => {
       popular: true
     }
   ];
+
+  
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+        const outsideIndia = data?.country_code !== "IN";
+        if (outsideIndia) {
+          setCurrency("USD");
+          setAmount("$2");
+        } else {
+          setCurrency("INR");
+            setAmount("₹99");
+        }
+      } catch (e) {
+        setCurrency("INR");
+        setAmount("₹99");
+        console.error(e);
+      }
+    };
+    run();
+  }, []);
+
+  const fmt = new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
+    style: "currency",
+    currency,
+  });
+  const freePriceLabel = fmt.format(0);
+  const proPriceLabel = fmt.format(amount);
 
   return (
     <section id="pricing" className="py-20 px-4 bg-linear-to-b from-background to-background/50">
@@ -76,7 +112,7 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-
+                <Link href="/pricing" passHref>
                 <Button 
                   variant={plan.popular ? "hero" : "outline"}
                   className="w-full"
@@ -84,6 +120,7 @@ const Pricing = () => {
                 >
                   {plan.cta}
                 </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}

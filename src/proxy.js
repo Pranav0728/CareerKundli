@@ -14,7 +14,8 @@ export async function proxy(req) {
     if (
       pathname.startsWith("/analyze") ||
       pathname.startsWith("/history") ||
-      pathname.startsWith("/profile")
+      pathname.startsWith("/profile") ||
+      pathname.startsWith("/pricing")
     ) {
       return NextResponse.redirect(new URL("/signin", req.url));
     }
@@ -38,5 +39,5 @@ export async function proxy(req) {
 }
 
 export const config = {
-  matcher: ["/", "/analyze/:path*", "/history/:path*", "/profile/:path*"],
+  matcher: ["/", "/analyze/:path*", "/history/:path*", "/profile/:path*", "/pricing/:path*"],
 };
