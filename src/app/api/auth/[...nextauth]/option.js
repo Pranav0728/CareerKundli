@@ -9,12 +9,12 @@ import { getClient } from "@/lib/dbConnect";
 
 export const authOptions = {
     
-    adapter: MongoDBAdapter(await getClient()), 
+    adapter: MongoDBAdapter(getClient()),
   providers: [
     EmailProvider({
       server: {
         host: process.env.SMTP_HOST,
-        port: process.env.SMTP_PORT,
+        port: Number(process.env.SMTP_PORT || 587),
         auth: {
           user: process.env.NODEMAILER_EMAIL_ID,
           pass: process.env.NODEMAILER_EMAIL_PASSWORD,
@@ -42,5 +42,5 @@ export const authOptions = {
     signIn: "/signin", // optional custom sign-in page
   },
 
-  secret: "llO+ijpNJmGxSY6Ma3WyNpA3N1TVyqGGtHR7eIsNVJw=",
+  secret: process.env.NEXTAUTH_SECRET || "llO+ijpNJmGxSY6Ma3WyNpA3N1TVyqGGtHR7eIsNVJw=",
 };
