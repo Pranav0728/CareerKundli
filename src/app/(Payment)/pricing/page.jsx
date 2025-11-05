@@ -40,7 +40,7 @@ export default function PricingPage() {
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(amount * 100),
+        amount: Math.round(1 * 100),
         currency,
         name: "Career Kundli",
         description: "Career Pro Plan Subscription",
