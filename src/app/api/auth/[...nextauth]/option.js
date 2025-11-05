@@ -9,7 +9,7 @@ import { getClient } from "@/lib/dbConnect";
 
 export const authOptions = {
     
-    adapter: MongoDBAdapter(getClient()),
+  adapter: MongoDBAdapter(getClient()),
   providers: [
     EmailProvider({
       server: {
