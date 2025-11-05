@@ -24,9 +24,9 @@ function parseJSON(text) {
 }
 
 export async function analyzeResumeText(resumeText) {
-  // create explicit models so getGroqModel always receives a defined type
-  const fastModel = getGroqModel("fast");        // for analysis & prediction (cheaper/faster)
-  const creativeModel = getGroqModel("creative"); // for horoscope & roadmap (richer outputs)
+  // ✅ Use different models for each step
+  const fastModel = getGroqModel("fast");       // Llama 3.1 8B Instant
+  const creativeModel = getGroqModel("creative"); // Llama 3.3 70B Versatile
 
   // 1️⃣ Resume Analysis Chain (FAST)
   const analyzerPrompt = new PromptTemplate({
@@ -146,5 +146,6 @@ You MUST follow this exact structure and variable names in your JSON output.
 
   const roadmap = parseJSON(roadmapResp);
 
+  // ✅ Return final structured result
   return { analysis, prediction, horoscope, roadmap };
 }
