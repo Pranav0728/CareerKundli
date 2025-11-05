@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -28,8 +29,12 @@ const Footer = () => {
           
           {/* Links */}
           <div className="flex flex-wrap justify-center gap-6 mb-8 text-sm">
-            <a href="#" className="text-white/70 hover:text-white transition-colors">About</a>
-            <a href="#" className="text-white/70 hover:text-white transition-colors">Features</a>
+            <a href="#features" className="text-white/70 hover:text-white transition-colors">Features</a>
+            <Link href="/terms" className="text-white/70 hover:text-white transition-colors">Terms and Conditions</Link>
+            <Link href="/refund" className="text-white/70 hover:text-white transition-colors">Cancellations and Refunds</Link>
+            <Link href="/privacy" className="text-white/70 hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/contact" className="text-white/70 hover:text-white transition-colors">Contact Us</Link>
+            <Link href="/shipping" className="text-white/70 hover:text-white transition-colors">Shipping Policy</Link>
           </div>
           
           {/* Copyright */}
