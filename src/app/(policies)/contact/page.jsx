@@ -25,45 +25,14 @@ const ContactUs = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-foreground">support@careerkundli.com</p>
+              <p className="text-foreground">xroot.info@gmail.com</p>
               <p className="text-sm text-muted-foreground mt-2">
                 We'll respond within 24 hours
               </p>
             </CardContent>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Phone className="w-5 h-5 text-primary" />
-                Phone
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground">+1 (555) 123-4567</p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Mon-Fri, 9am-6pm EST
-              </p>
-            </CardContent>
-          </Card>
         </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-primary" />
-              Office Address
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-foreground">
-              Career Kundli Inc.<br />
-              123 Career Avenue<br />
-              Tech City, TC 12345<br />
-              United States
-            </p>
-          </CardContent>
-        </Card>
+          
       </main>
 
       <Footer />
