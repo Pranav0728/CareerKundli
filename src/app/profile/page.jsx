@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sparkles, Star, TrendingUp, FileText, Calendar, User } from "lucide-react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -19,7 +20,8 @@ const Profile = () => {
   });
 
   const [loading, setLoading] = useState(true);
-  
+  const { data: session } = useSession();
+  console.log(session?.user?.image);
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -71,7 +73,7 @@ const Profile = () => {
       <Sparkles className="fixed bottom-20 right-1/3 w-6 h-6 text-primary/30 animate-pulse-glow" />
 
       <Navbar />
-
+      
       <div className="relative z-10 container mx-auto px-4 py-24">
         {/* Hero Profile Card */}
         <Card className="max-w-4xl mx-auto mb-8 bg-card/90 backdrop-blur-lg border-primary/20 shadow-xl glow-gold">
@@ -79,10 +81,10 @@ const Profile = () => {
             <div className="flex justify-center mb-4">
               <div className="relative">
                 <Avatar className="w-24 h-24 border-2 border-primary/30 shadow-lg">
-                  <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.email)}&backgroundColor=gradient&backgroundType=gradientLinear`} alt={user.email} />
-                  <AvatarFallback className="bg-gradient-cosmic text-4xl font-bold text-secondary-foreground">
-                    {user.email.charAt(0).toUpperCase()}
-                  </AvatarFallback>
+                  <AvatarImage src={session?.user?.image || user.email.charAt(0).toUpperCase()} alt="profile_pic" />
+                  {/* <AvatarFallback className="bg-gradient-cosmic text-4xl font-bold text-secondary-foreground">
+                    
+                  </AvatarFallback> */}
                 </Avatar>
                 <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-primary-foreground animate-pulse-glow" />
@@ -150,16 +152,6 @@ const Profile = () => {
               <div className="flex justify-between items-center py-2 border-b border-border/30">
                 <span className="text-sm font-medium text-muted-foreground">Email Address</span>
                 <span className="text-sm font-semibold">{user.email || "N/A"}</span>
-              </div>
-              <div className="flex justify-between items-center py-2 border-b border-border/30">
-                <span className="text-sm font-medium text-muted-foreground">Joined Date</span>
-                <span className="text-sm font-semibold">
-                  {user.emailVerified ? new Date(user.emailVerified).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  }) : "N/A"}
-                </span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-border/30">
                 <span className="text-sm font-medium text-muted-foreground">Subscription Plan</span>

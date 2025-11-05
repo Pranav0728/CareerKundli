@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 // import { ModeToggle } from "./ui/ModeToggle";
 const logout = async () => {
   await signOut({ callbackUrl: "/" });
@@ -49,13 +50,13 @@ const Navbar = () => {
     profile?.subscription?.isActive &&
     profile?.subscription?.renewDate &&
     new Date(profile.subscription.renewDate).getTime() > Date.now();
-
+  const { data: session } = useSession();
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* ✅ Logo */}
-          <Link href="/" className="flex items-center gap-2 cursor-pointer">
+          <Link href="/analyze" className="flex items-center gap-2 cursor-pointer">
             <Sparkles className="w-6 h-6 text-primary" />
             <span className="text-xl font-bold text-gradient-gold">
               Career Kundli
@@ -83,13 +84,10 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <button className="focus:outline-none relative">
                   <Avatar className={`w-9 h-9 border ${isPro ? "ring-2 ring-offset-2 ring-yellow-400 ring-offset-background" : "border-border"} transition-all`}>
-                    <AvatarImage src="/avatar.png" alt="User Avatar" />
-                    <AvatarFallback>
-                      <User className="w-4 h-4 text-muted-foreground" />
-                    </AvatarFallback>
+                    <AvatarImage src={session?.user?.image || session?.user?.email?.charAt(0).toUpperCase()} alt="User Avatar" />
                   </Avatar>
                   {isPro && (
-                    <span className="absolute -top-1 -right-1 text-[10px] px-2 py-0.5 rounded-full bg-yellow-400 text-black font-bold shadow">PRO</span>
+                    <span className="absolute -top-1 -right-1 text-[10px] px-2  rounded-full bg-yellow-400 text-black font-bold shadow">PRO</span>
                   )}
                 </button>
               </DropdownMenuTrigger>
