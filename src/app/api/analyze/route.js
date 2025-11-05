@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/option";
 
 // Normalize roadmap structure to ensure arrays and string fields
+export const dynamic = "force-dynamic";
 function normalizeRoadmap(raw) {
   const toArray = (arr) => (Array.isArray(arr) ? arr : []);
   const normalizeStep = (s) => ({

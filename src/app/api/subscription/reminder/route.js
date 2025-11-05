@@ -3,6 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import User from "@/lib/models/users";
 import { sendExpiryReminderEmail } from "@/lib/mailer";
 
+export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     await dbConnect();
