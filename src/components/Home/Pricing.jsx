@@ -7,38 +7,37 @@ import Link from "next/link";
 
 const Pricing = () => {
   const [currency, setCurrency] = useState("INR");
-  const [amount, setAmount] = useState("₹99");
+  const [amount, setAmount] = useState(99); // ✅ store numeric only
+
   const plans = [
     {
       name: "Free Explorer",
-      price: "₹0",
+      price: 0,
       period: "forever",
       features: [
         "1 Career Kundli Analyses",
         "Basic AI + Astrology Insights",
         "Limited Job Market Data",
-        "Basic Skill Recommendations"
+        "Basic Skill Recommendations",
       ],
       cta: "Start Free",
-      popular: false
+      popular: false,
     },
     {
       name: "Career Pro",
-      price: amount,
+      price: amount, // ✅ dynamic number based on location
       period: "per month",
       features: [
         "Unlimited Career Analyses",
         "Live Job Market Insights",
         "AI-Generated Career Roadmap",
         "Shareable PDF Reports",
-        "Priority Support"
+        "Priority Support",
       ],
       cta: "Upgrade Now",
-      popular: true
-    }
+      popular: true,
+    },
   ];
-
-  
 
   useEffect(() => {
     const run = async () => {
@@ -46,28 +45,33 @@ const Pricing = () => {
         const res = await fetch("https://ipapi.co/json/");
         const data = await res.json();
         const outsideIndia = data?.country_code !== "IN";
+
         if (outsideIndia) {
           setCurrency("USD");
-          setAmount("$2");
+          setAmount(2); // ✅ numeric
         } else {
           setCurrency("INR");
-            setAmount("₹99");
+          setAmount(99); // ✅ numeric
         }
       } catch (e) {
         setCurrency("INR");
-        setAmount("₹99");
+        setAmount(99);
         console.error(e);
       }
     };
     run();
   }, []);
 
-  const fmt = new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
+const fmt = new Intl.NumberFormat(
+  currency === "INR" ? "en-IN" : "en-US",
+  {
     style: "currency",
     currency,
-  });
-  const freePriceLabel = fmt.format(0);
-  const proPriceLabel = fmt.format(amount);
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }
+);
+
 
   return (
     <section id="pricing" className="py-20 px-4 bg-linear-to-b from-background to-background/50">
@@ -86,9 +90,9 @@ const Pricing = () => {
             <Card
               key={index}
               className={`relative overflow-hidden transition-all duration-300 hover:scale-105 ${
-                plan.popular 
-                  ? 'border-primary shadow-lg shadow-primary/20 glow-effect' 
-                  : 'border-border'
+                plan.popular
+                  ? "border-primary shadow-lg shadow-primary/20 glow-effect"
+                  : "border-border"
               }`}
             >
               {plan.popular && (
@@ -100,7 +104,9 @@ const Pricing = () => {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gradient-gold">{plan.price}</span>
+                  <span className="text-4xl font-bold text-gradient-gold">
+                    {fmt.format(plan.price)} {/* ✅ auto formatted */}
+                  </span>
                   <span className="text-muted-foreground ml-2">/ {plan.period}</span>
                 </div>
 
@@ -112,14 +118,11 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
+
                 <Link href="/pricing" passHref>
-                <Button 
-                  variant={plan.popular ? "hero" : "outline"}
-                  className="w-full"
-                  size="lg"
-                >
-                  {plan.cta}
-                </Button>
+                  <Button variant={plan.popular ? "hero" : "outline"} className="w-full" size="lg">
+                    {plan.cta}
+                  </Button>
                 </Link>
               </CardContent>
             </Card>

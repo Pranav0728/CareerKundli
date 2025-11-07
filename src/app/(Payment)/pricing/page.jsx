@@ -97,7 +97,7 @@ export default function PricingPage() {
           <Card>
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-2">Free Explorer</h3>
-              <p className="text-4xl font-bold text-gradient-gold mb-4">₹0</p>
+              <p className="text-4xl font-bold text-gradient-gold mb-4">{currency === "INR" ? "₹0" : "$0"}</p>
               <ul className="space-y-3 text-left mb-8">
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>1 free analyses/month</li>
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Basic AI + Astrology Insights</li>
@@ -113,7 +113,7 @@ export default function PricingPage() {
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-2">Career Pro</h3>
               <p className="text-4xl font-bold text-gradient-gold mb-4">
-                {currency === "INR" ? "₹99" : "$2"}
+                {currency === "INR" ? `₹${amount}` : `$${amount}`}
               </p>
               <ul className="space-y-3 text-left mb-8">
                 <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Unlimited career analyses</li>
