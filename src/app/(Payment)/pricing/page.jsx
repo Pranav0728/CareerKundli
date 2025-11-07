@@ -5,11 +5,10 @@ import { Button } from "@/components/ui/button";
 import Script from "next/script";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import Link from "next/link";
 
 export default function PricingPage() {
   const [currency, setCurrency] = useState("INR");
-  const [amount, setAmount] = useState(1); // ✅ Default INR price ₹1
+  const [amount, setAmount] = useState(99); // default INR price
 
   useEffect(() => {
     const fetchRegion = async () => {
@@ -18,7 +17,7 @@ export default function PricingPage() {
         const data = await res.json();
         if (data.country_code !== "IN") {
           setCurrency("USD");
-          setAmount(0.01); // ✅ $0.01 USD
+          setAmount(2);
         }
       } catch (e) {
         console.error("Could not detect region:", e);
@@ -34,13 +33,12 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, currency }),
       });
-
       const data = await res.json();
       if (!data.orderId) throw new Error("Order creation failed");
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(amount * 100), // ✅ use actual amount
+        amount: Math.round(amount * 100),
         currency,
         name: "Career Kundli",
         description: "Career Pro Plan Subscription",
@@ -58,11 +56,8 @@ export default function PricingPage() {
                 currency,
               }),
             });
-
             const capRes = await capture.json();
-            if (!capture.ok)
-              throw new Error(capRes?.error || "Activation failed");
-
+            if (!capture.ok) throw new Error(capRes?.error || "Activation failed");
             window.location.href = "/success";
           } catch (err) {
             console.error("Activation error:", err);
@@ -104,24 +99,12 @@ export default function PricingPage() {
               <h3 className="text-2xl font-bold mb-2">Free Explorer</h3>
               <p className="text-4xl font-bold text-gradient-gold mb-4">₹0</p>
               <ul className="space-y-3 text-left mb-8">
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  1 free analyses/month
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Basic AI + Astrology Insights
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Career Path Recommendations
-                </li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>1 free analyses/month</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Basic AI + Astrology Insights</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Career Path Recommendations</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Personalized AI roadmap</li>
               </ul>
-              <Link href={"/analyze"}>
-                <Button variant="outline" className="w-full">
-                  Start Free
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full">Start Free</Button>
             </CardContent>
           </Card>
 
@@ -130,25 +113,12 @@ export default function PricingPage() {
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold mb-2">Career Pro</h3>
               <p className="text-4xl font-bold text-gradient-gold mb-4">
-                {currency === "INR" ? "₹1" : "$0.01"}
+                {currency === "INR" ? "₹99" : "$2"}
               </p>
               <ul className="space-y-3 text-left mb-8">
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Unlimited career analyses
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Live job market data
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Personalized AI roadmap
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check className="text-primary w-5 h-5" />
-                  Shareable PDF reports
-                </li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Unlimited career analyses</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Live job market data</li>
+                <li className="flex items-center gap-2"><Check className="text-primary w-5 h-5"/>Personalized AI roadmap</li>
               </ul>
               <Button className="w-full" onClick={handlePayment}>
                 Subscribe Now
