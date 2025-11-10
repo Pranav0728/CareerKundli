@@ -5,7 +5,8 @@ export const dynamic = "force-dynamic";
 export async function POST(req) {
   try {
     const { amount, currency } = await req.json();
-
+    console.log(process.env.RAZORPAY_KEY_ID)
+    console.log(process.env.RAZORPAY_KEY_SECRET)
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
       key_secret: process.env.RAZORPAY_KEY_SECRET,
