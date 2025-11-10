@@ -35,7 +35,7 @@ export default function PricingPage() {
       });
       const data = await res.json();
       if (!data.orderId) throw new Error("Order creation failed");
-      console.log(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
+      console.log("Razorpay key id: "+process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: Math.round(amount * 100),
