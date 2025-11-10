@@ -84,7 +84,12 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <button className="focus:outline-none relative">
                   <Avatar className={`w-9 h-9 border ${isPro ? "ring-2 ring-offset-2 ring-yellow-400 ring-offset-background" : "border-border"} transition-all`}>
-                    <AvatarImage src={session?.user?.image || session?.user?.email?.charAt(0).toUpperCase()} alt="User Avatar" />
+                    {console.log(session?.user?.image)}
+                    {session?.user?.image ? (
+                      <AvatarImage src={session.user.image } alt="User Avatar" />
+                    ) : (
+                      <AvatarFallback className="bg-primary text-primary-foreground">{session?.user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                    )}
                   </Avatar>
                   {isPro && (
                     <span className="absolute -top-1 -right-1 text-[10px] px-2  rounded-full bg-yellow-400 text-black font-bold shadow">PRO</span>

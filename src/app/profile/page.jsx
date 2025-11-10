@@ -82,9 +82,7 @@ const Profile = () => {
               <div className="relative">
                 <Avatar className="w-24 h-24 border-2 border-primary/30 shadow-lg">
                   <AvatarImage src={session?.user?.image || user.email.charAt(0).toUpperCase()} alt="profile_pic" />
-                  {/* <AvatarFallback className="bg-gradient-cosmic text-4xl font-bold text-secondary-foreground">
-                    
-                  </AvatarFallback> */}
+                  <AvatarFallback className="bg-gradient-cosmic text-4xl font-bold text-secondary-foreground">{session?.user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-primary-foreground animate-pulse-glow" />
