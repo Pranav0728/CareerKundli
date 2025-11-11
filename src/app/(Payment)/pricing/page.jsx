@@ -32,7 +32,6 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, currency }),
       });
-      console.log("Response:", data);
       const data = await res.json();
       if (!data.orderId) throw new Error("Order creation failed");
       
