@@ -25,7 +25,6 @@ export default function PricingPage() {
     };
     fetchRegion();
   }, []);
-
   const handlePayment = async () => {
     try {
       const res = await fetch("/api/checkout", {
@@ -33,9 +32,10 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount, currency }),
       });
+      console.log("Response:", data);
       const data = await res.json();
       if (!data.orderId) throw new Error("Order creation failed");
-      console.log("Razorpay key id: "+process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
+      
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: Math.round(amount * 100),
