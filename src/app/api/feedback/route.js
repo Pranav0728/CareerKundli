@@ -12,12 +12,7 @@ export async function POST(req) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const meta = {
-      receivedAt: new Date().toISOString(),
-      headers: Object.fromEntries((req.headers || []).entries?.() || []),
-    };
-
-    await sendFeedbackEmail({ name, email, subject, message, meta });
+    await sendFeedbackEmail({ name, email, subject, message });
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (e) {
     console.error("Feedback error:", e);

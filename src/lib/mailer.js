@@ -47,7 +47,7 @@ Renew: https://your-app-domain/pricing
   });
 }
 
-export async function sendFeedbackEmail({ name, email, subject, message, meta }) {
+export async function sendFeedbackEmail({ name, email, subject, message }) {
   const transporter = getTransporter();
 
   const mailSubject = `New Feedback: ${subject || "No subject"}`;
@@ -58,11 +58,7 @@ Email: ${email}
 Subject: ${subject}
 
 Message:
-${message}
-
-Meta:
-${meta ? JSON.stringify(meta, null, 2) : "N/A"}
-`;
+${message}`;
 
   await transporter.sendMail({
     from: process.env.NODEMAILER_EMAIL_ID,
