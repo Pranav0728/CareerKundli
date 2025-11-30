@@ -9,7 +9,7 @@ import { Check } from "lucide-react";
 export default function PricingPage() {
   const [currency, setCurrency] = useState("INR");
   const [amount, setAmount] = useState(99); // default INR price
-
+  const session = 
   useEffect(() => {
     const fetchRegion = async () => {
       try {

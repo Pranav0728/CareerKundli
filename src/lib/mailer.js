@@ -46,3 +46,29 @@ Renew: https://your-app-domain/pricing
     text,
   });
 }
+
+export async function sendFeedbackEmail({ name, email, subject, message, meta }) {
+  const transporter = getTransporter();
+
+  const mailSubject = `New Feedback: ${subject || "No subject"}`;
+  const text = `New feedback received:
+
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+
+Meta:
+${meta ? JSON.stringify(meta, null, 2) : "N/A"}
+`;
+
+  await transporter.sendMail({
+    from: process.env.NODEMAILER_EMAIL_ID,
+    to: process.env.NODEMAILER_EMAIL_ID,
+    replyTo: email || undefined,
+    subject: mailSubject,
+    text,
+  });
+}
