@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
-
+import { Analytics } from "@vercel/analytics/next"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,6 +36,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <AuthProvider>{children}</AuthProvider>
+          <Analytics />
           <Toaster richColors position="top-center" />
           {/* Floating Feedback Button */}
           <Link

@@ -17,6 +17,11 @@ const features = [
     title: "Career Roadmap",
     description: "Get a detailed short, mid, and long-term roadmap with actionable steps to reach your career goals.",
   },
+  {
+    icon: Sparkles,
+    title: "Personalized Recommendations",
+    description: "Receive tailored career advice based on your unique profile and industry trends.",
+  }
 ];
 
 const Features = () => {
@@ -31,7 +36,6 @@ const Features = () => {
             Everything you need to navigate your professional journey
           </p>
         </div>
-        
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <Card 

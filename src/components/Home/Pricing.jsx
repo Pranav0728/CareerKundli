@@ -8,7 +8,7 @@ import Link from "next/link";
 const Pricing = () => {
   const [currency, setCurrency] = useState("INR");
   const [amount, setAmount] = useState(99); // ✅ store numeric only
-
+  
   const plans = [
     {
       name: "Free Explorer",
