@@ -10,13 +10,11 @@ const Hero = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const router = useRouter();
 
-
-
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       toast.success("Resume uploaded!", {
-        description: "Click 'Generate Destiny' to continue"
+        description: "Click 'Generate Destiny' to continue",
       });
     }
   };
@@ -24,29 +22,27 @@ const Hero = () => {
   const handleGenerateDestiny = () => {
     if (!selectedFile) {
       toast.error("Please upload your resume", {
-        description: "We need your resume to analyze your career destiny"
+        description: "We need your resume to analyze your career destiny",
       });
       return;
     }
     router.push("/signin");
   };
 
-
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-0">
-        <Image
-          src="/assets/hero-cosmic.jpg"
-          alt="Cosmic destiny"
-          fill
-          className="object-cover opacity-60"
-        />
-        
-        {/* <div className="absolute inset-0 bg-linear-to-b from-background/80 via-background/60 to-background" /> */}
-      </div>
+          <Image
+            src="/assets/hero-cosmic.jpg"
+            alt="Cosmic destiny"
+            fill
+            className="object-cover opacity-60"
+          />
+
+          {/* <div className="absolute inset-0 bg-linear-to-b from-background/80 via-background/60 to-background" /> */}
+        </div>
         <div className="absolute inset-0 bg-linear-to-b from-background/80 via-background/60 to-background" />
       </div>
 
@@ -69,11 +65,28 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center animate-fade-in-up">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-float">
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium text-primary">
-            AI-Powered Career Astrology
-          </span>
+        <div className="flex flex-col items-center justify-center">
+          <div className="inline-flex items-center gap-2 px-4  mb-8 animate-float">
+            <a
+              href="https://www.producthunt.com/products/careerkundli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-careerkundli"
+              target="_blank"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1047305&theme=dark&t=1765174588002"
+                alt="CareerKundli - AI-Powered Career Astrology for the Modern World | Product Hunt"
+                style={{ width: "250px", height: "54px" }}
+                width="250"
+                height="54"
+              />
+            </a>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-float">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">
+              AI-Powered Career Astrology
+            </span>
+          </div>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
